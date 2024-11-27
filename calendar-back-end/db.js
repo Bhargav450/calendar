@@ -2,11 +2,22 @@ require('dotenv').config();
 const { Sequelize, QueryTypes } = require('sequelize');
 
 const databaseUrl = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-console.log("databaseUrl:::",process.env.DATABASE_URL)
 const sequelize = new Sequelize(databaseUrl, {
-    logging: false, // Disable logging to avoid exposing sensitive information,
-    postgres: dialect
+  dialect: 'postgres',
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false // Set this to true if needed
+    }
+  },
+  pool: {
+    max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  }
 });
+
 
 sequelize.authenticate()
   .then(() => {
