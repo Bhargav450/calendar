@@ -1,17 +1,16 @@
 require('dotenv').config();
 const { Sequelize, QueryTypes } = require('sequelize');
 
-
-const sequelize = new Sequelize(process.env.DATABASE_URL, {
-  dialect: 'postgres',
-  dialectOptions: {
-    ssl: {
-      require: true,
-      rejectUnauthorized: false // This skips verification but should be handled properly for production
-    }
+const sequelize = new Sequelize(
+  process.env.DB_NAME,
+  process.env.DB_USER,
+  process.env.DB_PASSWORD,
+  {
+      host: process.env.DB_HOST || 'localhost',
+      dialect: 'postgres',
+      logging: console.log,
   }
-});
-
+);
 
 sequelize.authenticate()
   .then(() => {
