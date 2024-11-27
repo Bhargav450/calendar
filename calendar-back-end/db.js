@@ -3,11 +3,9 @@ require('dotenv').config({ path: require('path').resolve(__dirname, '.env') }); 
 
 const { Sequelize, QueryTypes } = require('sequelize');
 
-
+const dbUrl = process.env.DATABASE_URL || `postgres://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
 const sequelize = new Sequelize(
-    process.env.DB_NAME,
-    process.env.DB_USER,
-    process.env.DB_PASSWORD,
+    dbUrl,
     {
         host: process.env.DB_HOST || 'localhost',
         dialect: 'postgres',
